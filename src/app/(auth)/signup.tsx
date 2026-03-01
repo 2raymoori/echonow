@@ -1,11 +1,101 @@
-import { Text } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
+
+import { useRouter } from "expo-router";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Signup = () => {
+    const router = useRouter();
     return (
-        <SafeAreaView>
-            <Text>Signup</Text>
+        <SafeAreaView edges={["top", "left", "right"]} style={styles.container}>
+            <View style={styles.content}>
+                <Text style={styles.title}>Create Your EchoNow Account</Text>
+                <Text style={styles.subtitle}>Sign Up...</Text>
+
+                <View style={styles.form}>
+                    <TextInput placeholder="Email..."
+                        keyboardType="email-address"
+                        autoComplete="email"
+                        placeholderTextColor={"#999"}
+                        style={styles.input} />
+
+                    <TextInput placeholder="Password..."
+                        secureTextEntry
+                        autoComplete="password"
+                        autoCapitalize="none"
+                        placeholderTextColor={"#999"}
+                        style={styles.input} />
+                    <TextInput placeholder="Confirm Password..."
+                        secureTextEntry
+                        autoComplete="password"
+                        autoCapitalize="none"
+                        placeholderTextColor={"#999"}
+                        style={styles.input} />
+
+                    <TouchableOpacity style={styles.button}>
+                        <Text style={styles.loginButtonText}>Sign Up</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => router.replace("/(auth)/login")} style={styles.linkButton}>
+                        <Text>Already have an account? <Text style={styles.signupText}>Login</Text></Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
         </SafeAreaView>
     )
 }
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "orange"
+    },
+    content: {
+        flex: 1,
+        justifyContent: "center",
+        padding: 20
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: "bold",
+        color: "white",
+        textAlign: "center",
+        marginBottom: 8
+    },
+    subtitle: {
+        fontSize: 16,
+        color: "white",
+        textAlign: "center",
+        marginTop: 8
+    },
+    form: {
+        width: "100%",
+        marginTop: 24,
+        gap: 16
+    },
+    input: {
+        backgroundColor: "white",
+        padding: 16,
+        borderRadius: 8,
+        fontSize: 16
+    },
+    button: {
+        backgroundColor: "lightgreen",
+        padding: 16,
+        borderRadius: 8,
+        alignItems: "center"
+    },
+    linkButton: {
+        padding: 16,
+        alignItems: "center"
+    },
+    signupText: {
+        color: "white",
+        fontWeight: "bold"
+    },
+    loginButtonText: {
+        color: "white",
+        fontSize: 16,
+        fontWeight: "bold"
+    }
+})
 export default Signup
+
