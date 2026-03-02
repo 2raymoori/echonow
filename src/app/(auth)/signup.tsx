@@ -1,6 +1,6 @@
 
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../../../context/AuthContext";
@@ -12,6 +12,10 @@ const Signup = () => {
     const [confirmPassword, setConfirmPassword] = useState<string>("")
     const [loading, setLoading] = useState<boolean>(false)
     const { signUp } = useAuth();
+
+    useEffect(() => {
+        router.replace("/(auth)/onboarding")
+    }, [])
 
     const onSignUpPressed = async () => {
         try {
