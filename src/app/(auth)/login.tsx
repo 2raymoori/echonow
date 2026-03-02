@@ -1,9 +1,18 @@
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuth } from "../../../context/AuthContext";
 
 const Login = () => {
     const router = useRouter();
+    const [email, setEmail] = useState<string>("")
+    const [password, setPassword] = useState<string>("")
+    const { signIn } = useAuth();
+
+    const showLogin = () => {
+        console.log(email, password)
+    }
     return (
         <SafeAreaView edges={["top", "left", "right"]} style={styles.container}>
             <View style={styles.content}>
@@ -15,16 +24,20 @@ const Login = () => {
                         keyboardType="email-address"
                         autoComplete="email"
                         placeholderTextColor={"#999"}
-                        style={styles.input} />
+                        style={styles.input}
+                        value={email}
+                        onChangeText={setEmail} />
 
                     <TextInput placeholder="Password..."
                         secureTextEntry
                         autoComplete="password"
                         autoCapitalize="none"
                         placeholderTextColor={"#999"}
-                        style={styles.input} />
+                        style={styles.input}
+                        value={password}
+                        onChangeText={setPassword} />
 
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={showLogin}>
                         <Text style={styles.loginButtonText}>Login</Text>
                     </TouchableOpacity>
 

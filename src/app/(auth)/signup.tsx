@@ -1,10 +1,30 @@
 
 import { useRouter } from "expo-router";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuth } from "../../../context/AuthContext";
 
 const Signup = () => {
     const router = useRouter();
+    const [email, setEmail] = useState<string>("")
+    const [password, setPassword] = useState<string>("")
+    const [confirmPassword, setConfirmPassword] = useState<string>("")
+    const [loading, setLoading] = useState<boolean>(false)
+    const { signUp } = useAuth();
+
+    const onSignUpPressed = async () => {
+        try {
+            setLoading(true)
+            console.log(email, password, confirmPassword)
+            const res = await signUp(email, password)
+            console.log(res)
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
+    }
     return (
         <SafeAreaView edges={["top", "left", "right"]} style={styles.container}>
             <View style={styles.content}>
@@ -16,23 +36,33 @@ const Signup = () => {
                         keyboardType="email-address"
                         autoComplete="email"
                         placeholderTextColor={"#999"}
-                        style={styles.input} />
+                        style={styles.input}
+                        value={email}
+                        onChangeText={setEmail} />
 
                     <TextInput placeholder="Password..."
                         secureTextEntry
                         autoComplete="password"
                         autoCapitalize="none"
                         placeholderTextColor={"#999"}
-                        style={styles.input} />
+                        style={styles.input}
+                        value={password}
+                        onChangeText={setPassword} />
                     <TextInput placeholder="Confirm Password..."
                         secureTextEntry
                         autoComplete="password"
                         autoCapitalize="none"
                         placeholderTextColor={"#999"}
-                        style={styles.input} />
+                        style={styles.input}
+                        value={confirmPassword}
+                        onChangeText={setConfirmPassword} />
 
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.loginButtonText}>Sign Up</Text>
+                    <TouchableOpacity style={styles.button} onPress={onSignUpPressed}>
+                        {loading ? (
+                            <ActivityIndicator size={20} color="white" />
+                        ) : (
+                            <Text style={styles.loginButtonText}>Sign Up</Text>
+                        )}
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() => router.replace("/(auth)/login")} style={styles.linkButton}>
