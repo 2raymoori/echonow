@@ -1,9 +1,9 @@
 
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useAuth } from "../../../context/AuthContext";
+import { Cntxt } from "../../../context/AuthenticationContext";
 
 const Signup = () => {
     const router = useRouter();
@@ -11,24 +11,29 @@ const Signup = () => {
     const [password, setPassword] = useState<string>("")
     const [confirmPassword, setConfirmPassword] = useState<string>("")
     const [loading, setLoading] = useState<boolean>(false)
-    const { signUp } = useAuth();
+    const authCntxt = useContext(Cntxt);
+    //const authContext = useAuth();
 
     useEffect(() => {
         router.replace("/(auth)/onboarding")
     }, [])
 
     const onSignUpPressed = async () => {
+
         try {
             setLoading(true)
             console.log(email, password, confirmPassword)
-            const res = await signUp(email, password)
-            console.log(res)
+            const res = await authCntxt!.signUp(email, password, confirmPassword)
         } catch (error) {
             console.log(error)
         } finally {
             setLoading(false)
         }
     }
+    /*
+touray@uni-potsdam.de touray123 touray123
+ LOG  {"app_metadata": {"provider": "email", "providers": ["email"]}, "aud": "authenticated", "created_at": "2026-03-03T13:53:16.917746Z", "email": "touray@uni-potsdam.de", "email_confirmed_at": "2026-03-03T13:53:16.962744081Z", "id": "23ff106f-0c90-4530-a471-5ab01789a516", "identities": [{"created_at": "2026-03-03T13:53:16.950231Z", "email": "touray@uni-potsdam.de", "id": "23ff106f-0c90-4530-a471-5ab01789a516", "identity_data": [Object], "identity_id": "f0f91440-001d-4b94-972d-04d72ca378d9", "last_sign_in_at": "2026-03-03T13:53:16.949656751Z", "provider": "email", "updated_at": "2026-03-03T13:53:16.950231Z", "user_id": "23ff106f-0c90-4530-a471-5ab01789a516"}], "is_anonymous": false, "last_sign_in_at": "2026-03-03T13:53:16.978788506Z", "phone": "", "role": "authenticated", "updated_at": "2026-03-03T13:53:17.004319Z", "user_metadata": {"email": "touray@uni-potsdam.de", "email_verified": true, "phone_verified": false, "sub": "23ff106f-0c90-4530-a471-5ab01789a516"}}
+    */
     return (
         <SafeAreaView edges={["top", "left", "right"]} style={styles.container}>
             <View style={styles.content}>
@@ -36,7 +41,7 @@ const Signup = () => {
                 <Text style={styles.subtitle}>Sign Up...</Text>
 
                 <View style={styles.form}>
-                    <TextInput placeholder="Email..."
+                    <TextInput autoCapitalize="none" placeholder="Email..."
                         keyboardType="email-address"
                         autoComplete="email"
                         placeholderTextColor={"#999"}

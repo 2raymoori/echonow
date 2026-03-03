@@ -1,7 +1,31 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
+import { Image } from "expo-image";
+import * as ImagePicker from "expo-image-picker";
+import { useState } from "react";
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { uploadProfileImage } from "../../../context/AuthenticationContext";
 
 const Onboarding = () => {
+    const [image, setImage] = useState<string | null>(null);
+
+    const pickImage = async () => {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+            Alert.alert("Permission needed", "Sorry, we need camera roll permissions to make this work!");
+            return;
+        }
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ["images"],
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 0.8,
+        });
+        if (!result.canceled && result.assets?.[0]) {
+            console.log(result.assets[0])
+            setImage(result.assets[0].uri);
+            await uploadProfileImage('0092291b-c602-4e25-8bcf-c50cfe87cc29', result.assets[0].uri);
+        }
+    }
     return (
         <SafeAreaView style={styles.container}>
             <View>
@@ -9,10 +33,14 @@ const Onboarding = () => {
                 <Text style={styles.subtitle}>Let's get to know you better</Text>
             </View>
             <View style={styles.form}>
-                <TouchableOpacity style={styles.imageContainer}>
-                    <View style={styles.placeholderImage}>
-                        <Text style={{ color: "black", fontSize: 40 }}>+</Text>
-                    </View>
+                <TouchableOpacity style={styles.imageContainer} onPress={pickImage}>
+                    {image ? (
+                        <Image source={{ uri: image }} style={styles.placeholderImage} />
+                    ) : (
+                        <View style={styles.placeholderImage}>
+                            <Text style={{ color: "black", fontSize: 40 }}>+</Text>
+                        </View>
+                    )}
                     <View style={styles.editContainer}>
                         <Text style={{ color: "white" }}>Edit</Text>
                     </View>

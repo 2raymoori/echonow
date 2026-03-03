@@ -1,17 +1,24 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useAuth } from "../../../context/AuthContext";
+import { Cntxt, selectOnboardedUsers } from "../../../context/AuthenticationContext";
+//import { useAuth } from "../../../context/AuthContext";
 
 const Login = () => {
     const router = useRouter();
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    const { signIn } = useAuth();
+    const authCntxt = useContext(Cntxt);
 
-    const showLogin = () => {
-        console.log(email, password)
+    const showLogin = async () => {
+        try {
+            // await authCntxt!.signIn(email, password)
+            const allOnboard = await selectOnboardedUsers()
+            console.log(allOnboard)
+        } catch (error) {
+            console.log("Sorry... There exists an error", error)
+        }
     }
     return (
         <SafeAreaView edges={["top", "left", "right"]} style={styles.container}>

@@ -1,15 +1,15 @@
 import { Stack } from "expo-router"
-import { AuthProvider } from "../../../context/AuthContext"
+import { AuthenticationProvider } from "../../../context/AuthenticationContext"
 
 const AuthLayout = () => {
     return (
 
-        <AuthProvider>
+        <AuthenticationProvider>
             <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="login" options={{ headerShown: false }} />
                 <Stack.Screen name="register" options={{ headerShown: false }} />
             </Stack>
-        </AuthProvider>
+        </AuthenticationProvider>
     )
 }
 export default AuthLayout
